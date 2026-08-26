@@ -1,0 +1,7 @@
+parameters:
+    level: 9
+    paths:
+        - src
+    scanFiles:
+        - stubs/pam-runtime.stub.php
+    tmpDir: .phpstan-cache
