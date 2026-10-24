@@ -54,11 +54,22 @@ final class BrowserProcess
 
         $descriptors = [
             0 => ['pipe', 'r'],
-            1 => ['file', '/dev/null', 'a'],
-            2 => ['file', '/dev/null', 'a'],
+            1 => ['file', '/tmp/pam-chromium-stdout.log', 'a'],
+            2 => ['file', '/tmp/pam-chromium-stderr.log', 'a'],
         ];
         $pipes = [];
-        $process = proc_open($arguments, $descriptors, $pipes, null, null, ['bypass_shell' => true]);
+        $environment = getenv();
+        unset($environment['LD_LIBRARY_PATH']);
+
+        $process = proc_open(
+            $arguments,
+            $descriptors,
+            $pipes,
+            null,
+            $environment,
+            ['bypass_shell' => true]
+        );
+
         if (!is_resource($process)) {
             if ($ownsDirectory) {
                 self::removeDirectory($userDataDirectory);
